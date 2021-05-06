@@ -2157,16 +2157,16 @@ def sonarAim(playerTurn):
             sonarAngle1 -= 5
 
         # increase power level
-        if keys[pygame.K_EQUALS] and sonarWidth1 >= 2:
-            sonarWidth1 -= 2
-            sonarRange1 += int(8 * scalingFactor)
+        if keys[pygame.K_EQUALS] and sonarWidth1 >= 1:
+            sonarWidth1 -= 1
+            sonarRange1 += int(4 * scalingFactor)
             # make the sonar power grow and shrink smoother
             if sonarWidth1%2:
                 sonarAngle1 += 1
         # decrease power level
         if keys[pygame.K_MINUS] and sonarWidth1 <= 135:
-            sonarWidth1 += 2
-            sonarRange1 -= int(8 * scalingFactor)
+            sonarWidth1 += 1
+            sonarRange1 -= int(4 * scalingFactor)
             # make the sonar power grow and shrink smoother
             if sonarWidth1%2:
                 sonarAngle1 -= 1
@@ -2186,16 +2186,16 @@ def sonarAim(playerTurn):
             sonarAngle2 -= 5
 
         # increase power level
-        if keys[pygame.K_EQUALS] and sonarWidth2 >= 2:
-            sonarWidth2 -= 2
-            sonarRange2 += int(8 * scalingFactor)
+        if keys[pygame.K_EQUALS] and sonarWidth2 >= 1:
+            sonarWidth2 -= 1
+            sonarRange2 += int(4 * scalingFactor)
             # make the sonar power grow and shrink smoother
             if sonarWidth2%2:
                 sonarAngle2 += 1
         # decrease power level
         if keys[pygame.K_MINUS] and sonarWidth2 <= 135:
-            sonarWidth2 += 2
-            sonarRange2 -= int(8 * scalingFactor)
+            sonarWidth2 += 1
+            sonarRange2 -= int(4 * scalingFactor)
             # make the sonar power grow and shrink smoother
             if sonarWidth2%2:
                 sonarAngle2 -= 1
@@ -2317,7 +2317,7 @@ def createSonar(playerTurn):
 
 # deletes sonar beams that are blocked by a ship
 def blockSonar():
-    sonarAngleTreshold = 0.1
+    sonarAngleTreshold = 0.05
     for key in shipDic1.keys():
         for key2 in shipDic1.keys():
             temp1 = shipDic1[key].averageAngle + shipDic1[key].averageAngle*sonarAngleTreshold
@@ -2352,7 +2352,11 @@ def pulseSonar():
     global gamePhase
     global pinPointPulse1
     global pinPointPulse2
+    global tempHitDic
+    global sonarHitPosx
+    global sonarHitPosy
 
+    tempHitDic = {}
     # check it under ship
     isSubUnderShip()
     # i guess put sounds here or maybe in a seperate function
@@ -2373,11 +2377,19 @@ def pulseSonar():
             print("Not Enough Sonar Charge")
             gamePhase = "sonar"
 
-        if len(sonarList2) == 1 and tempSonarCharge1 > 0:
+        if len(sonarList2) == 2 and tempSonarCharge1 > 0 and sonarList2[0].angle == sonarList2[1].angle:
             for key, item in shipDic2.items():
-                if shipDic2[key].sonarHitNum:
+                if whatThePointDoin(key):
                     pinPointPulse2 = key
                     whereSonarHit(1, key)
+            tempList = []
+            for key in tempHitDic.keys():
+                tempList.append(tempHitDic[key][0])
+            tempMin = min(tempList)
+            for key in tempHitDic.keys():
+                if tempMin in tempHitDic[key]:
+                    sonarHitPosx = tempHitDic[key][0]
+                    sonarHitPosy = tempHitDic[key][1]
 
     if playerTurn == 2:
         Sprite.missilePhaseMessage2 = True
@@ -2395,22 +2407,66 @@ def pulseSonar():
             print("Not Enough Sonar Charge")
             gamePhase = "sonar"
 
-        if len(sonarList1) == 1 and tempSonarCharge2 > 0:
+        if len(sonarList1) == 1 and tempSonarCharge2 > 0 and sonarList1[0].angle == sonarList1[1].angle:
             for key, item in shipDic1.items():
-                if shipDic1[key].sonarHitNum:
+                if whatThePointDoin(key):
                     pinPointPulse1 = key
                     whereSonarHit(2, key)
+            tempList = []
+            for key in tempHitDic.keys():
+                tempList.append(tempHitDic[key][0])
+            tempMin = min(tempList)
+            for key in tempHitDic.keys():
+                if tempMin in tempHitDic[key]:
+                    sonarHitPosx = tempHitDic[key][0]
+                    sonarHitPosy = tempHitDic[key][1]
 
     # update sonar charge meter
     createSonarChargeMeter()
+
+# this function tells you what the point the point is doing
+def whatThePointDoin(ship):
+    global sonarHitPosx
+    global sonarHitPosy
+    global tempHitDic
+    iter = 0
+    searchRadius = 25
+    sonarLength1 = math.sqrt((sonarPos1.x - sonarList1[0].end2.x)**2 + (sonarPos1.y - sonarList1[0].end2.y)**2)
+    sonarLength2 = math.sqrt((sonarPos2.x - sonarList2[0].end2.x)**2 + (sonarPos2.y - sonarList2[0].end2.y)**2)
+    while iter < sonarLength1 and playerTurn == 2:
+        # searching points along the line to find ship points near
+        x = iter*math.cos(sonarList1[0].angle) + sonarPos1.x
+        y = -iter*math.sin(sonarList1[0].angle) + sonarPos1.y
+        for vertex in range(len(shipDic1[ship].vert)):
+            distFromSonarPoint = math.sqrt((x - shipDic1[ship].vert[vertex].x)**2 + (y - shipDic1[ship].vert[vertex].y)**2)
+            if distFromSonarPoint < searchRadius:
+                sonarHitPosx = shipDic1[ship].vert[vertex].x
+                sonarHitPosy = shipDic1[ship].vert[vertex].y
+                tempHitDic[ship] = [math.sqrt((sonarPos1.x - sonarHitPosx)**2 + (sonarPos1.y - sonarHitPosy)**2), sonarHitPosx, sonarHitPosy]
+                return tempHitDic
+        iter += 10
+
+    while iter < sonarLength2 and playerTurn == 1:
+        # searching points along the line to find ship points near
+        x = iter*math.cos(sonarList2[0].angle) + sonarPos2.x
+        y = -iter*math.sin(sonarList2[0].angle) + sonarPos2.y
+        for vertex in range(len(shipDic2[ship].vert)):
+            distFromSonarPoint = math.sqrt((x - shipDic2[ship].vert[vertex].x)**2 + (y - shipDic2[ship].vert[vertex].y)**2)
+            print(ship, distFromSonarPoint)
+            if distFromSonarPoint < searchRadius:
+                print(ship)
+                sonarHitPosx = shipDic2[ship].vert[vertex].x
+                sonarHitPosy = shipDic2[ship].vert[vertex].y
+                tempHitDic[ship] = [math.sqrt((sonarPos2.x - sonarHitPosx)**2 + (sonarPos2.y - sonarHitPosy)**2), sonarHitPosx, sonarHitPosy]
+                return tempHitDic
+        iter += 10
+
+    return False     
 
 # what tile the beam hit ship
 def whereSonarHit(playerNum, ship):
     global pinPointDistress
     if playerNum == 1:
-        for key, item in sonarList2.items():
-            sonarHitPosx = sonarList2[key].end2.x
-            sonarHitPosy = sonarList2[key].end2.y
         if shipDic2[ship].width > shipDic2[ship].height:
             for i in range(shipDic2[ship].length):
                 if (shipDic2[ship].pos.x + tile*(i + 1)) > sonarHitPosx and sonarHitPosx < (shipDic2[ship].pos.x + tile*(i + 2)):
@@ -2423,9 +2479,6 @@ def whereSonarHit(playerNum, ship):
                     return
 
     if playerNum == 2:
-        for key, item in sonarList1.items():
-            sonarHitPosx = sonarList1[key].end2.x
-            sonarHitPosy = sonarList1[key].end2.y
         if shipDic1[ship].width > shipDic1[ship].height:
             for i in range(shipDic1[ship].length):
                 if (shipDic1[ship].pos.x + tile*(i + 1)) > sonarHitPosx and sonarHitPosx < (shipDic1[ship].pos.x + tile*(i + 2)):
@@ -3435,6 +3488,7 @@ shipDamages = {}
 missMarkers = {}
 hitMarkers = {}
 highLightMarkers = {}
+tempHitDic = {}
 
 # Default sonar 
 sonarList1 = []
@@ -3462,6 +3516,8 @@ subPunishLevel = 2
 warningCounter1 = 0
 warningCounter2 = 0
 pinPointDistress = 0
+sonarHitPosx = 0
+sonarHitPosy = 0
 # default sonar charge amount
 MAXSONARCHARGE = 700
 sonarCharge1 = MAXSONARCHARGE
