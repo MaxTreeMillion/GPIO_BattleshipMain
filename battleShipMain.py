@@ -47,6 +47,8 @@ ch_shipTheme2 = pygame.mixer.Channel(3)
 ch_shipTheme3 = pygame.mixer.Channel(4)
 ch_shipTheme4 = pygame.mixer.Channel(5)
 ch_waterBuffer = pygame.mixer.Channel(6)
+ch_buttonSounds = pygame.mixer.Channel(7)
+
 #   -Water Sounds
 #all water sounds are 5400 frames long (at 60FPS)
 
@@ -56,21 +58,22 @@ water2 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'water2.wav')
 water3 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'water3.wav'))
 waterS_array = [water1, water2, water3]
 #   -Ship Themes
-carrier_close = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy','Carrier - Close Range.wav'))
-carrier_mid = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy','Carrier - Mid Range.wav'))
-carrier_far = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy','Carrier - Long Range.wav'))
-#   -test notes for modular music system
-note1 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note1.wav'))
-note2 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note2.wav'))
-note3 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note3.wav'))
-note4 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note4.wav'))
-note5 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note5.wav'))
+th_destroyerSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_destroyerSimple.wav'))
+th_carrierSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_carrierSimple.wav'))
+th_cruiser1Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Simple.wav'))
+th_cruiser2Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Simple.wav'))
+th_battleshipSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipSimple.wav'))
 note6 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note6.wav'))
 note7 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note7.wav'))
 note8 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note8.wav'))
 note9 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note9.wav'))
 note10 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note10.wav'))
-
+#   -UI Sounds
+num_letter_button1 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button1.wav'))
+num_letter_button2 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button2.wav'))
+num_letter_button3 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button3.wav'))
+buttonS_array = [num_letter_button1, num_letter_button2, num_letter_button3]
+NOSHIPSDETECTED = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'NOSHIPS.wav'))
 
 
 # x/y vectors
@@ -339,120 +342,140 @@ class Target(Rectangle):
 
         # sets trigger var to true
         if keys[pygame.K_1] and isPress_coord_1:
+            num_letter_buttonSound()
             isPress_coord_1 = 0
             isPress_displayCoords = 1
             targetCoords.append(1)
         if not(keys[pygame.K_1]):
             isPress_coord_1 = 1
         if keys[pygame.K_2] and isPress_coord_2:
+            num_letter_buttonSound()
             isPress_coord_2 = 0
             isPress_displayCoords = 1
             targetCoords.append(2)
         if not(keys[pygame.K_2]):
             isPress_coord_2 = 1
         if keys[pygame.K_3] and isPress_coord_3:
+            num_letter_buttonSound()
             isPress_coord_3 = 0
             isPress_displayCoords = 1
             targetCoords.append(3)
         if not(keys[pygame.K_3]):
             isPress_coord_3 = 1
         if keys[pygame.K_4] and isPress_coord_4:
+            num_letter_buttonSound()
             isPress_coord_4 = 0
             isPress_displayCoords = 1
             targetCoords.append(4)
         if not(keys[pygame.K_4]):
             isPress_coord_4 = 1
         if keys[pygame.K_5] and isPress_coord_5:
+            num_letter_buttonSound()
             isPress_coord_5 = 0
             isPress_displayCoords = 1
             targetCoords.append(5)
         if not(keys[pygame.K_5]):
             isPress_coord_5 = 1
         if keys[pygame.K_6] and isPress_coord_6:
+            num_letter_buttonSound()
             isPress_coord_6 = 0
             isPress_displayCoords = 1
             targetCoords.append(6)
         if not(keys[pygame.K_6]):
             isPress_coord_6 = 1
         if keys[pygame.K_7] and isPress_coord_7:
+            num_letter_buttonSound()
             isPress_coord_7 = 0
             isPress_displayCoords = 1
             targetCoords.append(7)
         if not(keys[pygame.K_7]):
             isPress_coord_7 = 1
         if keys[pygame.K_8] and isPress_coord_8:
+            num_letter_buttonSound()
             isPress_coord_8 = 0
             isPress_displayCoords = 1
             targetCoords.append(8)
         if not(keys[pygame.K_8]):
             isPress_coord_8 = 1
         if keys[pygame.K_9] and isPress_coord_9:
+            num_letter_buttonSound()
             isPress_coord_9 = 0
             isPress_displayCoords = 1
             targetCoords.append(9)
         if not(keys[pygame.K_9]):
             isPress_coord_9 = 1
         if keys[pygame.K_0] and isPress_coord_0:
+            num_letter_buttonSound()
             isPress_coord_0 = 0
             isPress_displayCoords = 1
             targetCoords.append(0)
         if not(keys[pygame.K_0]):
             isPress_coord_0 = 1
         if keys[pygame.K_a] and isPress_coord_A:
+            num_letter_buttonSound()
             isPress_coord_A = 0
             isPress_displayCoords = 1
             targetCoords.append('A')
         if not(keys[pygame.K_a]):
             isPress_coord_A = 1
         if keys[pygame.K_b] and isPress_coord_B:
+            num_letter_buttonSound()
             isPress_coord_B = 0
             isPress_displayCoords = 1
             targetCoords.append('B')
         if not(keys[pygame.K_b]):
             isPress_coord_B = 1
         if keys[pygame.K_c] and isPress_coord_C:
+            num_letter_buttonSound()
             isPress_coord_C = 0
             isPress_displayCoords = 1
             targetCoords.append('C')
         if not(keys[pygame.K_c]):
             isPress_coord_C = 1
         if keys[pygame.K_d] and isPress_coord_D:
+            num_letter_buttonSound()
             isPress_coord_D = 0
             isPress_displayCoords = 1
             targetCoords.append('D')
         if not(keys[pygame.K_d]):
             isPress_coord_D = 1
         if keys[pygame.K_e] and isPress_coord_E:
+            num_letter_buttonSound()
             isPress_coord_E = 0
             isPress_displayCoords = 1
             targetCoords.append('E')
         if not(keys[pygame.K_e]):
             isPress_coord_E = 1
         if keys[pygame.K_f] and isPress_coord_F:
+            num_letter_buttonSound()
             isPress_coord_F = 0
             isPress_displayCoords = 1
             targetCoords.append('F')
         if not(keys[pygame.K_f]):
             isPress_coord_F = 1
         if keys[pygame.K_g] and isPress_coord_G:
+            num_letter_buttonSound()
             isPress_coord_G = 0
             isPress_displayCoords = 1
             targetCoords.append('G')
         if not(keys[pygame.K_g]):
             isPress_coord_G = 1
         if keys[pygame.K_h] and isPress_coord_H:
+            num_letter_buttonSound()
             isPress_coord_H = 0
             isPress_displayCoords = 1
             targetCoords.append('H')
         if not(keys[pygame.K_h]):
             isPress_coord_H = 1
         if keys[pygame.K_i] and isPress_coord_I:
+            num_letter_buttonSound()
             isPress_coord_I = 0
             isPress_displayCoords = 1
             targetCoords.append('I')
         if not(keys[pygame.K_i]):
             isPress_coord_I = 1
         if keys[pygame.K_j] and isPress_coord_J:
+            num_letter_buttonSound()
             isPress_coord_J = 0
             isPress_displayCoords = 1
             targetCoords.append('J')
@@ -2805,8 +2828,8 @@ def destroyEnemySub():
     global allDistressTest
 
     # triggers the changing of players
-    playerTrigger = 1
     if gamePhase == "sonar":
+        playerTrigger = 1
         if playerTurn == 1:
             if sonarCharge1 == MAXSONARCHARGE:
                 allDistressTest = True
@@ -2824,6 +2847,8 @@ def destroyEnemySub():
                 player2End = True
                 subSink1 = True
         gamePhase = "shoot"
+    else:
+        print("It's too late for that!")
 
 # puts all ships into distress
 def allShipDistress(playerInDistress):
@@ -3066,13 +3091,19 @@ def shipTheme_playback(sonar_hitShips):
     global shipDic1
     global shipDic2
     global playerTurn
-    print("ship0", shipDic2["ship0"].sonarHitNum)
-    print("ship1", shipDic2["ship1"].sonarHitNum)
-    print("ship2", shipDic2["ship2"].sonarHitNum)
-    print("ship3", shipDic2["ship3"].sonarHitNum)
-    print("ship4", shipDic2["ship4"].sonarHitNum)
+
+    
     #list with all relevent ship objects
     shipList = list(sonar_hitShips.values())
+
+    if shipList == [] and playerTurn == 1:
+        ch_buttonSounds.play(NOSHIPSDETECTED)
+        ch_buttonSounds.set_volume(0.6,0.0)
+        
+    if shipList == [] and playerTurn == 2:
+        ch_buttonSounds.play(NOSHIPSDETECTED)
+        ch_buttonSounds.set_volume(0.0,0.6)
+        
     
     #playback - player turn decides what ship dictionaries to pull from for ship values
     if playerTurn == 1:
@@ -3081,7 +3112,7 @@ def shipTheme_playback(sonar_hitShips):
         #audio pan done by setting each channels volume w two parameters (0.0,0.0) or (L,R) where L and R are float representations of volume in the stereo field (<=1)
         
         #if enough time, a mixing step that makes volumes in balance with one another
-
+        
         if shipDic2['ship0'] in shipList:
             #volume_distanceRatio = current avg sonar distance / max sonar distance
             #280 is what im working with for max sonar distance
@@ -3091,9 +3122,9 @@ def shipTheme_playback(sonar_hitShips):
             #using vol dist ratioto select which theme plays (decided to pair the parameters - volume_distanceRatio isn't an accurate name for the variable but whateva)
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme0.play(note1)
+                ch_shipTheme0.play(th_carrierSimple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme0.play(note2)
+                ch_shipTheme0.play(th_carrierSimple)
             
             if volume_distanceRatio < 0.25:
                 ch_shipTheme0.set_volume(0.9,0.0)
@@ -3106,6 +3137,8 @@ def shipTheme_playback(sonar_hitShips):
                 
             #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship0'].averageDistance,shipDic2['ship0'].sonarHitNum, volume_distanceRatio))
             
+            
+            
 
         if shipDic2['ship1'] in shipList:
             volume_distanceRatio = shipDic2['ship1'].averageDistance/280
@@ -3113,9 +3146,9 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme1.play(note3)
+                ch_shipTheme1.play(th_battleshipSimple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme1.play(note4)
+                ch_shipTheme1.play(th_battleshipSimple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3135,9 +3168,9 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme2.play(note5)
+                ch_shipTheme2.play(th_cruiser1Simple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme2.play(note6)
+                ch_shipTheme2.play(th_cruiser1Simple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3157,9 +3190,9 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme3.play(note7)
+                ch_shipTheme3.play(th_cruiser2Simple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme3.play(note8)
+                ch_shipTheme3.play(th_cruiser2Simple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3179,9 +3212,9 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme4.play(note9)
+                ch_shipTheme4.play(th_destroyerSimple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme4.play(note10)
+                ch_shipTheme4.play(th_destroyerSimple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3201,13 +3234,14 @@ def shipTheme_playback(sonar_hitShips):
         if shipDic1['ship0'] in shipList:
             #280 is what im working with for max distance
             volume_distanceRatio = shipDic1['ship0'].averageDistance/280
+            print('ship0')
 
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme0.play(note1)
+                ch_shipTheme0.play(th_carrierSimple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme0.play(note2)
+                ch_shipTheme0.play(th_carrierSimple)
             
             if volume_distanceRatio < 0.25:
                 ch_shipTheme0.set_volume(0.0,0.9)
@@ -3226,13 +3260,14 @@ def shipTheme_playback(sonar_hitShips):
         if shipDic1['ship1'] in shipList:
             #280 is what im working with for max distance
             volume_distanceRatio = shipDic1['ship1'].averageDistance/280
+            print('ship1')
 
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme1.play(note3)
+                ch_shipTheme1.play(th_battleshipSimple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme1.play(note4)
+                ch_shipTheme1.play(th_battleshipSimple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3249,13 +3284,14 @@ def shipTheme_playback(sonar_hitShips):
         if shipDic1['ship2'] in shipList:
             #280 is what im working with for max distance
             volume_distanceRatio = shipDic1['ship2'].averageDistance/280
+            print('ship2')
 
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme2.play(note5)
+                ch_shipTheme2.play(th_cruiser1Simple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme2.play(note6)
+                ch_shipTheme2.play(th_cruiser1Simple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3272,13 +3308,14 @@ def shipTheme_playback(sonar_hitShips):
         if shipDic1['ship3'] in shipList:
             #280 is what im working with for max distance
             volume_distanceRatio = shipDic1['ship3'].averageDistance/280
+            print('ship3')
 
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme3.play(note7)
+                ch_shipTheme3.play(th_cruiser2Simple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme3.play(note8)
+                ch_shipTheme3.play(th_cruiser2Simple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3295,13 +3332,14 @@ def shipTheme_playback(sonar_hitShips):
         if shipDic1['ship4'] in shipList:
             #280 is what im working with for max distance
             volume_distanceRatio = shipDic1['ship4'].averageDistance/280
+            print('ship4')
 
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme4.play(note9)
+                ch_shipTheme4.play(th_destroyerSimple)
             elif volume_distanceRatio > 0.5:
-                ch_shipTheme4.play(note10)
+                ch_shipTheme4.play(th_destroyerSimple)
 
             
             if volume_distanceRatio < 0.25:
@@ -3350,6 +3388,16 @@ def waterSound(run, waterClock, waterSound, waterChannel, waterChannelBuffer):
     #fadeout should be % == 0 by (650-35= 615)
     # default first player to get to control
 
+def num_letter_buttonSound():
+    global buttonS_array
+    
+    ch_buttonSounds.play(buttonS_array[randint(0,2)])
+
+    if playerTurn == 1:
+        ch_buttonSounds.set_volume(0.5,0.0)
+        
+    if playerTurn == 2:
+        ch_buttonSounds.set_volume(0.0,0.5)
       
 # default player stuff
 playerTurn = 1
