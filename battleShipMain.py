@@ -14,10 +14,10 @@ from random import randint
 import os
 
 # screen deminsions stuff
-screenHeight = 1280
-screenWidth = 720
-#screenHeight = 896
-#screenWidth = 504
+#screenHeight = 1280
+#screenWidth = 720
+screenHeight = 896
+screenWidth = 504
 doubleScreenWidth = screenWidth*2
 playScreenHeight = int(screenHeight/2)
 playScreenWidth = screenWidth
@@ -63,19 +63,20 @@ th_carrierSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th
 th_cruiser1Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Simple.wav'))
 th_cruiser2Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Simple.wav'))
 th_battleshipSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipSimple.wav'))
-note6 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note6.wav'))
-note7 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note7.wav'))
-note8 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note8.wav'))
-note9 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note9.wav'))
-note10 = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'note10.wav'))
+#th_destroyerIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_destroyerIntense.wav'))
+#th_carrierIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_carrierIntense.wav'))
+#th_cruiser1Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Intense.wav'))
+#th_cruiser2Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Intense.wav'))
+#th_battleshipIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipIntense.wav'))
 #   -UI Sounds
 num_letter_button1 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button1.wav'))
 num_letter_button2 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button2.wav'))
 num_letter_button3 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button3.wav'))
 buttonS_array = [num_letter_button1, num_letter_button2, num_letter_button3]
 NOSHIPSDETECTED = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'NOSHIPS.wav'))
-
-
+#trim this sound a little
+missile_hit = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'missile_hit.wav'))
+missile_miss = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'missile_miss.wav'))
 # x/y vectors
 vec = pygame.math.Vector2
 
@@ -2284,6 +2285,16 @@ def createSonar(playerTurn):
     createSonarPowerMeter(sonarRange1, sonarRange2)
 
     #coupling good times
+
+    #checking sonar charge for audio playback
+    #disabling playback if not enough charge
+    #valve anti-cheat
+    if playerTurn == 1 and Sprite.notEnoughMessage1:
+        sonarController = 0
+
+    if playerTurn == 2 and Sprite.notEnoughMessage2:
+        sonarController = 0
+    
     #making a list of ships hit by sonar if in sonar stage
     #player 1 and player 2
     blockSonar()
@@ -2643,6 +2654,10 @@ def shootMissile():
         # for phase message
         Sprite.subPhaseMessage2 = True
         if isCollides[0] and damageTest1:
+            #plays explosion sound if missile lands
+            ch_buttonSounds.play(missile_hit)
+            ch_buttonSounds.set_volume(0.5,0.0)
+            
             Sprite.hitMessage1 = True
             sonarCharge1 += MAXSONARCHARGE*rechargePercent
             print("You hit {}!!". format(isCollides[1]))
@@ -2658,6 +2673,9 @@ def shootMissile():
             # miss marker for player 1 sonar
             missMarkers["miss%s" %len(missMarkers)] = MissMarker((255,0,0), curser1.pos.x - playScreenWidth, curser1.pos.y - playScreenHeight, tile, tile)
             if damageTest1:
+                #plays miss sound if missile misses
+                ch_buttonSounds.play(missile_miss)
+                ch_buttonSounds.set_volume(1.0,0.0)
                 Sprite.missMessage1 = True
                 print("All you shot was sea!")
                 print("~~~~~~~~")
@@ -2674,6 +2692,10 @@ def shootMissile():
         # for phase message
         Sprite.subPhaseMessage1 = True
         if isCollides[0] and damageTest2:
+            #plays explosion sound if missile lands
+            ch_buttonSounds.play(missile_hit)
+            ch_buttonSounds.set_volume(0.0,0.5)
+            
             sonarCharge2 += MAXSONARCHARGE*rechargePercent
             Sprite.hitMessage2 = True
             print("You hit {}!!". format(isCollides[1]))
@@ -2689,6 +2711,9 @@ def shootMissile():
             # miss marker for player 2 sonar
             missMarkers["miss%s" %len(missMarkers)] = MissMarker((255,0,0), curser2.pos.x + playScreenWidth, curser2.pos.y - playScreenHeight, tile, tile)
             if damageTest2:
+                #plays miss sound if missile misses
+                ch_buttonSounds.play(missile_miss)
+                ch_buttonSounds.set_volume(0.0,1.0)
                 Sprite.missMessage2 = True
                 print("All you shot was sea!")
                 print("~~~~~~~~")
@@ -3174,19 +3199,12 @@ def shipTheme_playback(sonar_hitShips):
             
             #using vol dist ratioto select which theme plays (decided to pair the parameters - volume_distanceRatio isn't an accurate name for the variable but whateva)
             if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
                 ch_shipTheme0.play(th_carrierSimple)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme0.play(th_carrierSimple)
-            
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme0.set_volume(0.9,0.0)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme0.set_volume(0.4,0.0)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme0.set_volume(0.2,0.0)
+
+            ch_shipTheme0.set_volume(volume_distanceRatio,0.0)
+    
                 
             #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship0'].averageDistance,shipDic2['ship0'].sonarHitNum, volume_distanceRatio))
             
@@ -3198,20 +3216,12 @@ def shipTheme_playback(sonar_hitShips):
 
             
             if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
                 ch_shipTheme1.play(th_battleshipSimple)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme1.play(th_battleshipSimple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme1.set_volume(0.9,0.0)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme1.set_volume(0.4,0.0)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme1.set_volume(0.2,0.0)
+            ch_shipTheme1.set_volume(volume_distanceRatio,0.0)
 
             #print("ship 1 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship1'].averageDistance,shipDic2['ship1'].sonarHitNum,volume_distanceRatio))
 
@@ -3220,20 +3230,12 @@ def shipTheme_playback(sonar_hitShips):
 
             
             if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
                 ch_shipTheme2.play(th_cruiser1Simple)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme2.play(th_cruiser1Simple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme2.set_volume(0.9,0.0)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme2.set_volume(0.4,0.0)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme2.set_volume(0.2,0.0)
+            ch_shipTheme2.set_volume(volume_distanceRatio,0.0)
 
             #print("ship 2 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship2'].averageDistance,shipDic2['ship2'].sonarHitNum, volume_distanceRatio))
 
@@ -3242,20 +3244,12 @@ def shipTheme_playback(sonar_hitShips):
 
             
             if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
                 ch_shipTheme3.play(th_cruiser2Simple)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme3.play(th_cruiser2Simple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme3.set_volume(0.9,0.0)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme3.set_volume(0.4,0.0)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme3.set_volume(0.2,0.0)
+            ch_shipTheme3.set_volume(volume_distanceRatio,0.0)
 
             #print("ship 3 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship3'].averageDistance,shipDic2['ship3'].sonarHitNum,volume_distanceRatio))
             
@@ -3270,14 +3264,7 @@ def shipTheme_playback(sonar_hitShips):
                 ch_shipTheme4.play(th_destroyerSimple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme4.set_volume(0.9,0.0)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme4.set_volume(0.4,0.0)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme4.set_volume(0.2,0.0)
+            ch_shipTheme4.set_volume(volume_distanceRatio,0.0)
 
             #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship4'].averageDistance,shipDic2['ship4'].sonarHitNum, volume_distanceRatio))
 
@@ -3296,14 +3283,7 @@ def shipTheme_playback(sonar_hitShips):
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme0.play(th_carrierSimple)
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme0.set_volume(0.0,0.9)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme0.set_volume(0.0,0.4)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme0.set_volume(0.0,0.2)
+            ch_shipTheme0.set_volume(0.0,volume_distanceRatio)
                 
             #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic1['ship0'].averageDistance,shipDic1['ship0'].sonarHitNum, volume_distanceRatio))
             
@@ -3323,14 +3303,7 @@ def shipTheme_playback(sonar_hitShips):
                 ch_shipTheme1.play(th_battleshipSimple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme1.set_volume(0.0,0.9)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme1.set_volume(0.0,0.4)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme1.set_volume(0.0,0.2)
+            ch_shipTheme1.set_volume(0.0,volume_distanceRatio)
 
             #print("ship 1 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship1'].averageDistance,shipDic1['ship1'].sonarHitNum,volume_distanceRatio))
 
@@ -3347,14 +3320,7 @@ def shipTheme_playback(sonar_hitShips):
                 ch_shipTheme2.play(th_cruiser1Simple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme2.set_volume(0.0,0.9)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme2.set_volume(0.0,0.4)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme2.set_volume(0.0,0.2)
+            ch_shipTheme2.set_volume(0.0,volume_distanceRatio)
 
             #print("ship 2 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship2'].averageDistance,shipDic1['ship2'].sonarHitNum, volume_distanceRatio))
 
@@ -3371,14 +3337,7 @@ def shipTheme_playback(sonar_hitShips):
                 ch_shipTheme3.play(th_cruiser2Simple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme3.set_volume(0.0,0.9)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme3.set_volume(0.0,0.4)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme3.set_volume(0.0,0.2)
+            ch_shipTheme3.set_volume(0.0,volume_distanceRatio)
 
             #print("ship 3 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic1['ship3'].averageDistance,shipDic1['ship3'].sonarHitNum,volume_distanceRatio))
             
@@ -3395,14 +3354,7 @@ def shipTheme_playback(sonar_hitShips):
                 ch_shipTheme4.play(th_destroyerSimple)
 
             
-            if volume_distanceRatio < 0.25:
-                ch_shipTheme4.set_volume(0.0,0.9)
-                    
-            elif volume_distanceRatio >= 0.25 and volume_distanceRatio < 0.50:
-                ch_shipTheme4.set_volume(0.0,0.4)
-                
-            elif volume_distanceRatio >= 0.50:
-                ch_shipTheme4.set_volume(0.0,0.2)
+            ch_shipTheme4.set_volume(0.0,volume_distanceRatio)
 
             #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship4'].averageDistance,shipDic1['ship4'].sonarHitNum, volume_distanceRatio))
     
