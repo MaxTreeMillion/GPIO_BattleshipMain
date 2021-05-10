@@ -63,20 +63,20 @@ th_carrierSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th
 th_cruiser1Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Simple.wav'))
 th_cruiser2Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Simple.wav'))
 th_battleshipSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipSimple.wav'))
-#th_destroyerIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_destroyerIntense.wav'))
+th_destroyerIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_destroyerIntense.wav'))
 #th_carrierIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_carrierIntense.wav'))
-#th_cruiser1Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Intense.wav'))
+th_cruiser1Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Intense.wav'))
 #th_cruiser2Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Intense.wav'))
-#th_battleshipIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipIntense.wav'))
+th_battleshipIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipIntense.wav'))
 #   -UI Sounds
 num_letter_button1 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button1.wav'))
 num_letter_button2 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button2.wav'))
 num_letter_button3 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button3.wav'))
 buttonS_array = [num_letter_button1, num_letter_button2, num_letter_button3]
 NOSHIPSDETECTED = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'NOSHIPS.wav'))
-#trim this sound a little
 missile_hit = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'missile_hit.wav'))
 missile_miss = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'missile_miss.wav'))
+distressBeaconLight = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'distressBeaconLight.wav'))
 # x/y vectors
 vec = pygame.math.Vector2
 
@@ -2463,9 +2463,9 @@ def whatThePointDoin(ship):
         y = -iter*math.sin(sonarList2[0].angle) + sonarPos2.y
         for vertex in range(len(shipDic2[ship].vert)):
             distFromSonarPoint = math.sqrt((x - shipDic2[ship].vert[vertex].x)**2 + (y - shipDic2[ship].vert[vertex].y)**2)
-            print(ship, distFromSonarPoint)
+            #print(ship, distFromSonarPoint)
             if distFromSonarPoint < searchRadius:
-                print(ship)
+                #print(ship)
                 sonarHitPosx = shipDic2[ship].vert[vertex].x
                 sonarHitPosy = shipDic2[ship].vert[vertex].y
                 tempHitDic[ship] = [math.sqrt((sonarPos2.x - sonarHitPosx)**2 + (sonarPos2.y - sonarHitPosy)**2), sonarHitPosx, sonarHitPosy]
@@ -2863,6 +2863,8 @@ def shipDistress(playerInDistress):
     distressCalls = {}
 
     if playerInDistress == 1:
+        ch_buttonSounds.play(distressBeaconLight)
+        ch_buttonSounds.set_volume(1.0,0.0)
         # guarantees that atleast one part of the ship will be lit
         if shipDic1[shipName].width < shipDic1[shipName].height:
             distressCalls["ontarget"] = distressCall((255,255,0), shipDic1[shipName].pos.x + playScreenWidth, shipDic1[shipName].pos.y + randint(0, shipLength - 1)*tile - playScreenHeight, tile, tile)
@@ -2878,6 +2880,8 @@ def shipDistress(playerInDistress):
                     distressCalls["distress%s" %len(distressCalls)] = distressCall((255,255,0), shipDic1[shipName].pos.x + tile*randint(-i,i) + distressOffset*tile + int(0.5 * shipLength)*tile + playScreenWidth, shipDic1[shipName].pos.y + tile*randint(-i,i) + distressOffset*tile - playScreenHeight, tile, tile)
 
     if playerInDistress == 2:
+        ch_buttonSounds.play(distressBeaconLight)
+        ch_buttonSounds.set_volume(0.0,1.0)
         # guarantees that atleast one part of the ship will be lit
         if shipDic2[shipName].width < shipDic2[shipName].height:
             distressCalls["ontarget"] = distressCall((255,255,0), shipDic2[shipName].pos.x + playScreenWidth, shipDic2[shipName].pos.y + randint(0, shipLength - 1)*tile - playScreenHeight, tile, tile)
@@ -3216,7 +3220,7 @@ def shipTheme_playback(sonar_hitShips):
 
             
             if volume_distanceRatio <= 0.5:
-                ch_shipTheme1.play(th_battleshipSimple)
+                ch_shipTheme1.play(th_battleshipIntense)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme1.play(th_battleshipSimple)
 
@@ -3230,7 +3234,7 @@ def shipTheme_playback(sonar_hitShips):
 
             
             if volume_distanceRatio <= 0.5:
-                ch_shipTheme2.play(th_cruiser1Simple)
+                ch_shipTheme2.play(th_cruiser1Intense)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme2.play(th_cruiser1Simple)
 
@@ -3259,7 +3263,7 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme4.play(th_destroyerSimple)
+                ch_shipTheme4.play(th_destroyerIntense)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme4.play(th_destroyerSimple)
 
@@ -3298,7 +3302,7 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme1.play(th_battleshipSimple)
+                ch_shipTheme1.play(th_battleshipIntense)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme1.play(th_battleshipSimple)
 
@@ -3315,7 +3319,7 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme2.play(th_cruiser1Simple)
+                ch_shipTheme2.play(th_cruiser1Intense)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme2.play(th_cruiser1Simple)
 
@@ -3349,7 +3353,7 @@ def shipTheme_playback(sonar_hitShips):
             
             if volume_distanceRatio <= 0.5:
                 #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme4.play(th_destroyerSimple)
+                ch_shipTheme4.play(th_destroyerIntense)
             elif volume_distanceRatio > 0.5:
                 ch_shipTheme4.play(th_destroyerSimple)
 
@@ -3368,7 +3372,7 @@ def waterSound(run, waterClock, waterSound, waterChannel, waterChannelBuffer):
 
     waterSound = waterSound[randint(0,2)]
 
- #begin playback on main water channel if the game is running and the channel is not currently being used
+    #begin playback on main water channel if the game is running and the channel is not currently being used
     if run == True and waterChannel.get_busy() == False:
         
        #play the sound for the length of the duration (will not use the whole duration - could potentially use smaller sound files)
@@ -3376,14 +3380,14 @@ def waterSound(run, waterClock, waterSound, waterChannel, waterChannelBuffer):
        #setting volume (in stereo) to 1/2 of full volume 
        waterChannel.set_volume(0.5,0.5)
 
- #fade conditional - tracks duration of play length and fades accordingly
- #if water clock number is a number near any number where % 650 = 0:
- #fadeout the primary playback channel, and fade in the secondary playback channel
+    #fade conditional - tracks duration of play length and fades accordingly
+    #if water clock number is a number near any number where % 650 = 0:
+    #fadeout the primary playback channel, and fade in the secondary playback channel
     if waterChannel.get_busy() == True and waterClock % 3000 == 0:
         waterChannel.fadeout(9000)
         waterChannelBuffer.play(waterSound, maxtime=80000, fade_ms=9000)
 
- #fades out the buffer channel once enough time has passed for the primary playback channel to fade back in
+    #fades out the buffer channel once enough time has passed for the primary playback channel to fade back in
     if waterChannelBuffer.get_busy() == True and waterChannel.get_busy() == True and waterClock % 3500 == 0:#615+35=685 (5 seconds after a fade occurs)
         waterChannelBuffer.fadeout(5000)
 
