@@ -64,10 +64,10 @@ th_cruiser1Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 't
 th_cruiser2Simple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Simple.wav'))
 th_battleshipSimple = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipSimple.wav'))
 th_destroyerIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_destroyerIntense.wav'))
-#th_carrierIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_carrierIntense.wav'))
+th_carrierIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_carrierIntense.wav'))
 th_cruiser1Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser1Intense.wav'))
-#th_cruiser2Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Intense.wav'))
-th_battleshipIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipIntense.wav'))
+th_cruiser2Intense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_cruiser2Intense.wav'))
+th_battleshipIntense = pygame.mixer.Sound(os.path.join('Ship Themes (wav) copy', 'th_battleshipIntense1.wav'))
 #   -UI Sounds
 num_letter_button1 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button1.wav'))
 num_letter_button2 = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'num_letter_button2.wav'))
@@ -3193,175 +3193,192 @@ def shipTheme_playback(sonar_hitShips):
         #does this for each ship
         #audio pan done by setting each channels volume w two parameters (0.0,0.0) or (L,R) where L and R are float representations of volume in the stereo field (<=1)
         
-        #if enough time, a mixing step that makes volumes in balance with one another
-        
-        if shipDic2['ship0'] in shipList:
-            #volume_distanceRatio = current avg sonar distance / max sonar distance
-            #280 is what im working with for max sonar distance
-            volume_distanceRatio = shipDic2['ship0'].averageDistance/280
+        try:
+            if shipDic2['ship0'] in shipList:
+                #volume_distanceRatio = current avg sonar distance / max sonar distance
+                #280 is what im working with for max sonar distance
+                volume_distanceRatio = shipDic2['ship0'].averageDistance/280
 
-            
-            #using vol dist ratioto select which theme plays (decided to pair the parameters - volume_distanceRatio isn't an accurate name for the variable but whateva)
-            if volume_distanceRatio <= 0.5:
-                ch_shipTheme0.play(th_carrierSimple)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme0.play(th_carrierSimple)
-
-            ch_shipTheme0.set_volume(volume_distanceRatio,0.0)
-    
                 
-            #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship0'].averageDistance,shipDic2['ship0'].sonarHitNum, volume_distanceRatio))
+                #using vol dist ratioto select which theme plays (decided to pair the parameters - volume_distanceRatio isn't an accurate name for the variable but whateva)
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme0.play(th_carrierIntense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme0.play(th_carrierSimple)
+                
+
+                ch_shipTheme0.set_volume(volume_distanceRatio,0.0)
+                #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship0'].averageDistance,shipDic2['ship0'].sonarHitNum, volume_distanceRatio))
+                
+        except:
+            pass
+
+               
+        try:
+            if shipDic2['ship1'] in shipList:
+                volume_distanceRatio = shipDic2['ship1'].averageDistance/280
+
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme1.play(th_battleshipIntense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme1.play(th_battleshipSimple)
+
+                
+                ch_shipTheme1.set_volume(volume_distanceRatio,0.0)
+
+                #print("ship 1 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship1'].averageDistance,shipDic2['ship1'].sonarHitNum,volume_distanceRatio))
+        except:
+            pass
+
+        try:
+            if shipDic2['ship2'] in shipList:
+                volume_distanceRatio = shipDic2['ship2'].averageDistance/280
+
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme2.play(th_cruiser1Intense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme2.play(th_cruiser1Simple)
+
+                
+                ch_shipTheme2.set_volume(volume_distanceRatio,0.0)
+
+                #print("ship 2 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship2'].averageDistance,shipDic2['ship2'].sonarHitNum, volume_distanceRatio))
+        except:
+            pass
+
+        try:
+            if shipDic2['ship3'] in shipList:
+                volume_distanceRatio = shipDic2['ship3'].averageDistance/280
+
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme3.play(th_cruiser2Intense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme3.play(th_cruiser2Simple)
+
+                
+                ch_shipTheme3.set_volume(volume_distanceRatio,0.0)
+
+                #print("ship 3 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship3'].averageDistance,shipDic2['ship3'].sonarHitNum,volume_distanceRatio))
+        except:
+            pass
+
+        try:
             
-            
-            
+            if shipDic2['ship4'] in shipList:
+                volume_distanceRatio = shipDic2['ship4'].averageDistance/280
 
-        if shipDic2['ship1'] in shipList:
-            volume_distanceRatio = shipDic2['ship1'].averageDistance/280
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme4.play(th_destroyerIntense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme4.play(th_destroyerSimple)
 
-            
-            if volume_distanceRatio <= 0.5:
-                ch_shipTheme1.play(th_battleshipIntense)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme1.play(th_battleshipSimple)
+                
+                ch_shipTheme4.set_volume(volume_distanceRatio,0.0)
 
-            
-            ch_shipTheme1.set_volume(volume_distanceRatio,0.0)
+                #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship4'].averageDistance,shipDic2['ship4'].sonarHitNum, volume_distanceRatio))
 
-            #print("ship 1 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship1'].averageDistance,shipDic2['ship1'].sonarHitNum,volume_distanceRatio))
+        except:
+            pass
 
-        if shipDic2['ship2'] in shipList:
-            volume_distanceRatio = shipDic2['ship2'].averageDistance/280
-
-            
-            if volume_distanceRatio <= 0.5:
-                ch_shipTheme2.play(th_cruiser1Intense)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme2.play(th_cruiser1Simple)
-
-            
-            ch_shipTheme2.set_volume(volume_distanceRatio,0.0)
-
-            #print("ship 2 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship2'].averageDistance,shipDic2['ship2'].sonarHitNum, volume_distanceRatio))
-
-        if shipDic2['ship3'] in shipList:
-            volume_distanceRatio = shipDic2['ship3'].averageDistance/280
-
-            
-            if volume_distanceRatio <= 0.5:
-                ch_shipTheme3.play(th_cruiser2Simple)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme3.play(th_cruiser2Simple)
-
-            
-            ch_shipTheme3.set_volume(volume_distanceRatio,0.0)
-
-            #print("ship 3 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic2['ship3'].averageDistance,shipDic2['ship3'].sonarHitNum,volume_distanceRatio))
-            
-        if shipDic2['ship4'] in shipList:
-            volume_distanceRatio = shipDic2['ship4'].averageDistance/280
-
-            
-            if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme4.play(th_destroyerIntense)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme4.play(th_destroyerSimple)
-
-            
-            ch_shipTheme4.set_volume(volume_distanceRatio,0.0)
-
-            #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic2['ship4'].averageDistance,shipDic2['ship4'].sonarHitNum, volume_distanceRatio))
-
-
+        
     if playerTurn == 2:
-        
-        if shipDic1['ship0'] in shipList:
-            #280 is what im working with for max distance
-            volume_distanceRatio = shipDic1['ship0'].averageDistance/280
-            print('ship0')
 
-            
-            if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme0.play(th_carrierSimple)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme0.play(th_carrierSimple)
-            
-            ch_shipTheme0.set_volume(0.0,volume_distanceRatio)
+        try:
+            if shipDic1['ship0'] in shipList:
+                #280 is what im working with for max distance
+                volume_distanceRatio = shipDic1['ship0'].averageDistance/280
+                print('ship0')
+
                 
-            #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic1['ship0'].averageDistance,shipDic1['ship0'].sonarHitNum, volume_distanceRatio))
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme0.play(th_carrierIntense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme0.play(th_carrierSimple)
+                
+                ch_shipTheme0.set_volume(0.0,volume_distanceRatio)
+                    
+                #print("ship 0 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic1['ship0'].averageDistance,shipDic1['ship0'].sonarHitNum, volume_distanceRatio))
+        except:
+            pass
             
             
+        try:
             
+            if shipDic1['ship1'] in shipList:
+                #280 is what im working with for max distance
+                volume_distanceRatio = shipDic1['ship1'].averageDistance/280
 
-        if shipDic1['ship1'] in shipList:
-            #280 is what im working with for max distance
-            volume_distanceRatio = shipDic1['ship1'].averageDistance/280
-            print('ship1')
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme1.play(th_battleshipIntense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme1.play(th_battleshipSimple)
 
-            
-            if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme1.play(th_battleshipIntense)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme1.play(th_battleshipSimple)
+                
+                ch_shipTheme1.set_volume(0.0,volume_distanceRatio)
 
-            
-            ch_shipTheme1.set_volume(0.0,volume_distanceRatio)
+                #print("ship 1 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship1'].averageDistance,shipDic1['ship1'].sonarHitNum,volume_distanceRatio))
+        except:
+            pass
 
-            #print("ship 1 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship1'].averageDistance,shipDic1['ship1'].sonarHitNum,volume_distanceRatio))
+        try:
+            if shipDic1['ship2'] in shipList:
+                #280 is what im working with for max distance
+                volume_distanceRatio = shipDic1['ship2'].averageDistance/280
 
-        if shipDic1['ship2'] in shipList:
-            #280 is what im working with for max distance
-            volume_distanceRatio = shipDic1['ship2'].averageDistance/280
-            print('ship2')
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme2.play(th_cruiser1Intense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme2.play(th_cruiser1Simple)
 
-            
-            if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme2.play(th_cruiser1Intense)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme2.play(th_cruiser1Simple)
+                
+                ch_shipTheme2.set_volume(0.0,volume_distanceRatio)
 
-            
-            ch_shipTheme2.set_volume(0.0,volume_distanceRatio)
+                #print("ship 2 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship2'].averageDistance,shipDic1['ship2'].sonarHitNum, volume_distanceRatio))
+        except:
+            pass
 
-            #print("ship 2 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship2'].averageDistance,shipDic1['ship2'].sonarHitNum, volume_distanceRatio))
+        try:
+            if shipDic1['ship3'] in shipList:
+                #280 is what im working with for max distance
+                volume_distanceRatio = shipDic1['ship3'].averageDistance/280
 
-        if shipDic1['ship3'] in shipList:
-            #280 is what im working with for max distance
-            volume_distanceRatio = shipDic1['ship3'].averageDistance/280
-            print('ship3')
+                
+                if volume_distanceRatio <= 0.4:
+                    ch_shipTheme3.play(th_cruiser2Intense)
+                elif volume_distanceRatio > 0.4:
+                    ch_shipTheme3.play(th_cruiser2Simple)
 
-            
-            if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme3.play(th_cruiser2Simple)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme3.play(th_cruiser2Simple)
+                
+                ch_shipTheme3.set_volume(0.0,volume_distanceRatio)
 
-            
-            ch_shipTheme3.set_volume(0.0,volume_distanceRatio)
+                #print("ship 3 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic1['ship3'].averageDistance,shipDic1['ship3'].sonarHitNum,volume_distanceRatio))
+        except:
+            pass
 
-            #print("ship 3 hit, ship beam avg dist: {}, ship beam hit num: {}, volume_distanceRatio {}".format(shipDic1['ship3'].averageDistance,shipDic1['ship3'].sonarHitNum,volume_distanceRatio))
-            
-        if shipDic1['ship4'] in shipList:
-            #280 is what im working with for max distance
-            volume_distanceRatio = shipDic1['ship4'].averageDistance/280
-            print('ship4')
+        try:
+            if shipDic1['ship4'] in shipList:
+                    #280 is what im working with for max distance
+                    volume_distanceRatio = shipDic1['ship4'].averageDistance/280
+                    print('ship4')
 
-            
-            if volume_distanceRatio <= 0.5:
-                #SUPPOSED TO BE COMPLEX THEME
-                ch_shipTheme4.play(th_destroyerIntense)
-            elif volume_distanceRatio > 0.5:
-                ch_shipTheme4.play(th_destroyerSimple)
+                    
+                    if volume_distanceRatio <= 0.4:
+                        ch_shipTheme4.play(th_destroyerIntense)
+                    elif volume_distanceRatio > 0.4:
+                        ch_shipTheme4.play(th_destroyerSimple)
 
-            
-            ch_shipTheme4.set_volume(0.0,volume_distanceRatio)
+                    
+                    ch_shipTheme4.set_volume(0.0,volume_distanceRatio)
 
-            #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship4'].averageDistance,shipDic1['ship4'].sonarHitNum, volume_distanceRatio))
-    
+                    #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship4'].averageDistance,shipDic1['ship4'].sonarHitNum, volume_distanceRatio))
+        except:
+            pass
     return
 
 # plays background water sounds
