@@ -2287,7 +2287,6 @@ def createSonar(playerTurn):
     createSonarPowerMeter(sonarRange1, sonarRange2)
 
     #coupling good times
-    print(sonarController)
 
     if sonarMaxController == 1:
         sonarController = 0
@@ -2489,7 +2488,6 @@ def whereSonarHit(playerNum, ship):
     
     if playerNum == 1:
         if shipDic2[ship].width > shipDic2[ship].height:
-            print('width > height')
             sonarMaxController = 1
             ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic2[ship].length):
@@ -2498,7 +2496,6 @@ def whereSonarHit(playerNum, ship):
                     return
         if shipDic2[ship].width < shipDic2[ship].height:
             sonarMaxController = 1
-            print('width < height')
             ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic2[ship].length):
                 if (shipDic2[ship].pos.y + tile*(i + 1)) > sonarHitPosy and sonarHitPosy < (shipDic2[ship].pos.y + tile*(i + 2)):
@@ -2507,7 +2504,6 @@ def whereSonarHit(playerNum, ship):
 
     if playerNum == 2:
         if shipDic1[ship].width > shipDic1[ship].height:
-            print('width > height')
             sonarMaxController = 1
             ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic1[ship].length):
@@ -2515,7 +2511,6 @@ def whereSonarHit(playerNum, ship):
                     pinPointDistress = distressCall((255,255,0), shipDic1[ship].pos.x + tile*i + playScreenWidth, shipDic1[ship].pos.y - playScreenHeight, tile, tile)
                     return
         if shipDic1[ship].width < shipDic1[ship].height:
-            print('width < height')
             sonarMaxController = 1
             ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic1[ship].length):
