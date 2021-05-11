@@ -16,8 +16,8 @@ import os
 # screen deminsions stuff
 #screenHeight = 1280
 #screenWidth = 720
-screenHeight = 896
-screenWidth = 504
+screenHeight = 720
+screenWidth = 400
 doubleScreenWidth = screenWidth*2
 playScreenHeight = int(screenHeight/2)
 playScreenWidth = screenWidth
@@ -27,7 +27,10 @@ sideMargin = (playScreenWidth - playScreen)/2
 tile = int(playScreen/10) + 0.75
 # for scaling certain things to different sizes
 scalingFactor = screenHeight/1280
-powerMeterScalingFactor = 0.875
+# for screenHeight = 1280
+#powerMeterScalingFactor = 0.875
+# for screenHeight = 720
+powerMeterScalingFactor = 0.95
 
 # initialize
 pygame.init()
@@ -1643,7 +1646,7 @@ class distressCall(Rectangle):
         win.blit(pygame.transform.smoothscale(pygame.image.load(os.path.join('Sprites','distressSignal.png')), (int(tile), int(tile))), (self.pos.x, self.pos.y))
 
 # class for hit markers
-class HitMarker:
+class HitMarker(Rectangle):
     def __init__(self, color, x, y, width, height):
         Rectangle.__init__(self, color, x, y, width, height)
 
@@ -1651,7 +1654,7 @@ class HitMarker:
         win.blit(pygame.transform.smoothscale(pygame.image.load(os.path.join('Sprites','missTile.png')), (int(tile), int(tile))), (self.pos.x, self.pos.y))
 
 # class for miss markers
-class MissMarker:
+class MissMarker(Rectangle):
     def __init__(self, color, x, y, width, height):
         Rectangle.__init__(self, color, x, y, width, height)
 
@@ -1659,7 +1662,7 @@ class MissMarker:
         win.blit(pygame.transform.smoothscale(pygame.image.load(os.path.join('Sprites','hitTile.png')), (int(tile), int(tile))), (self.pos.x, self.pos.y))
 
 # class for miss markers
-class HighLight:
+class HighLight(Rectangle):
     def __init__(self, color, x, y, width, height):
         Rectangle.__init__(self, color, x, y, width, height)
 
