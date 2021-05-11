@@ -345,19 +345,19 @@ class Target(Rectangle):
         keys = pygame.key.get_pressed()
 
         # sets trigger var to true
-        if keys[pygame.K_1] and isPress_coord_1:
+        if keys[pygame.K_1] and isPress_coord_1:    # or (button1Player1 and switch1 == True and playerTurn == 1) or (button1Player2 and switch2 == True and playerTurn == 2):
             num_letter_buttonSound()
             isPress_coord_1 = 0
             isPress_displayCoords = 1
             targetCoords.append(1)
-        if not(keys[pygame.K_1]):
+        if not(keys[pygame.K_1]):       # or not(button1Player1) or not(button1Player2):
             isPress_coord_1 = 1
-        if keys[pygame.K_2] and isPress_coord_2:
+        if keys[pygame.K_2] and isPress_coord_2:    # or (button2Player1 and switch1 == True and playerTurn == 1) or (button2Player2 and switch2 == True and playerTurn == 2):
             num_letter_buttonSound()
             isPress_coord_2 = 0
             isPress_displayCoords = 1
             targetCoords.append(2)
-        if not(keys[pygame.K_2]):
+        if not(keys[pygame.K_2]):       # or not(button2Player1) or not(button2Player2):
             isPress_coord_2 = 1
         if keys[pygame.K_3] and isPress_coord_3:
             num_letter_buttonSound()
@@ -415,19 +415,19 @@ class Target(Rectangle):
             targetCoords.append(0)
         if not(keys[pygame.K_0]):
             isPress_coord_0 = 1
-        if keys[pygame.K_a] and isPress_coord_A:
+        if keys[pygame.K_a] and isPress_coord_A:    # or (button1Player1 and switch1 == False and playerTurn == 1) or (button1Player2 and switch2 == False and playerTurn == 2):
             num_letter_buttonSound()
             isPress_coord_A = 0
             isPress_displayCoords = 1
             targetCoords.append('A')
-        if not(keys[pygame.K_a]):
+        if not(keys[pygame.K_a]):       # or not(button1Player1) or not(button1Player2):
             isPress_coord_A = 1
-        if keys[pygame.K_b] and isPress_coord_B:
+        if keys[pygame.K_b] and isPress_coord_B:    # or (button2Player1 and switch1 == False and playerTurn == 1) or (button2Player2 and switch2 == False and playerTurn == 2):
             num_letter_buttonSound()
             isPress_coord_B = 0
             isPress_displayCoords = 1
             targetCoords.append('B')
-        if not(keys[pygame.K_b]):
+        if not(keys[pygame.K_b]):       # or not(button1Player1) or not(button1Player2):
             isPress_coord_B = 1
         if keys[pygame.K_c] and isPress_coord_C:
             num_letter_buttonSound()
