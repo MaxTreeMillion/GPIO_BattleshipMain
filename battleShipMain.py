@@ -16,8 +16,8 @@ import os
 # screen deminsions stuff
 #screenHeight = 1280
 #screenWidth = 720
-screenHeight = 720
-screenWidth = 400
+screenHeight = 896
+screenWidth = 504
 doubleScreenWidth = screenWidth*2
 playScreenHeight = int(screenHeight/2)
 playScreenWidth = screenWidth
@@ -27,10 +27,7 @@ sideMargin = (playScreenWidth - playScreen)/2
 tile = int(playScreen/10) + 0.75
 # for scaling certain things to different sizes
 scalingFactor = screenHeight/1280
-# for screenHeight = 1280
-#powerMeterScalingFactor = 0.875
-# for screenHeight = 720
-powerMeterScalingFactor = 0.95
+powerMeterScalingFactor = 0.875
 
 # initialize
 pygame.init()
@@ -80,6 +77,7 @@ NOSHIPSDETECTED = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'NOSHIPS.wa
 missile_hit = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'missile_hit.wav'))
 missile_miss = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'missile_miss.wav'))
 distressBeaconLight = pygame.mixer.Sound(os.path.join('UI Sounds (wav)', 'distressBeaconLight.wav'))
+
 # x/y vectors
 vec = pygame.math.Vector2
 
@@ -345,19 +343,19 @@ class Target(Rectangle):
         keys = pygame.key.get_pressed()
 
         # sets trigger var to true
-        if keys[pygame.K_1] and isPress_coord_1:    # or (button1Player1 and switch1 == True and playerTurn == 1) or (button1Player2 and switch2 == True and playerTurn == 2):
+        if keys[pygame.K_1] and isPress_coord_1:
             num_letter_buttonSound()
             isPress_coord_1 = 0
             isPress_displayCoords = 1
             targetCoords.append(1)
-        if not(keys[pygame.K_1]):       # or not(button1Player1) or not(button1Player2):
+        if not(keys[pygame.K_1]):
             isPress_coord_1 = 1
-        if keys[pygame.K_2] and isPress_coord_2:    # or (button2Player1 and switch1 == True and playerTurn == 1) or (button2Player2 and switch2 == True and playerTurn == 2):
+        if keys[pygame.K_2] and isPress_coord_2:
             num_letter_buttonSound()
             isPress_coord_2 = 0
             isPress_displayCoords = 1
             targetCoords.append(2)
-        if not(keys[pygame.K_2]):       # or not(button2Player1) or not(button2Player2):
+        if not(keys[pygame.K_2]):
             isPress_coord_2 = 1
         if keys[pygame.K_3] and isPress_coord_3:
             num_letter_buttonSound()
@@ -415,19 +413,19 @@ class Target(Rectangle):
             targetCoords.append(0)
         if not(keys[pygame.K_0]):
             isPress_coord_0 = 1
-        if keys[pygame.K_a] and isPress_coord_A:    # or (button1Player1 and switch1 == False and playerTurn == 1) or (button1Player2 and switch2 == False and playerTurn == 2):
+        if keys[pygame.K_a] and isPress_coord_A:
             num_letter_buttonSound()
             isPress_coord_A = 0
             isPress_displayCoords = 1
             targetCoords.append('A')
-        if not(keys[pygame.K_a]):       # or not(button1Player1) or not(button1Player2):
+        if not(keys[pygame.K_a]):
             isPress_coord_A = 1
-        if keys[pygame.K_b] and isPress_coord_B:    # or (button2Player1 and switch1 == False and playerTurn == 1) or (button2Player2 and switch2 == False and playerTurn == 2):
+        if keys[pygame.K_b] and isPress_coord_B:
             num_letter_buttonSound()
             isPress_coord_B = 0
             isPress_displayCoords = 1
             targetCoords.append('B')
-        if not(keys[pygame.K_b]):       # or not(button1Player1) or not(button1Player2):
+        if not(keys[pygame.K_b]):
             isPress_coord_B = 1
         if keys[pygame.K_c] and isPress_coord_C:
             num_letter_buttonSound()
@@ -1646,7 +1644,7 @@ class distressCall(Rectangle):
         win.blit(pygame.transform.smoothscale(pygame.image.load(os.path.join('Sprites','distressSignal.png')), (int(tile), int(tile))), (self.pos.x, self.pos.y))
 
 # class for hit markers
-class HitMarker(Rectangle):
+class HitMarker:
     def __init__(self, color, x, y, width, height):
         Rectangle.__init__(self, color, x, y, width, height)
 
@@ -1654,7 +1652,7 @@ class HitMarker(Rectangle):
         win.blit(pygame.transform.smoothscale(pygame.image.load(os.path.join('Sprites','missTile.png')), (int(tile), int(tile))), (self.pos.x, self.pos.y))
 
 # class for miss markers
-class MissMarker(Rectangle):
+class MissMarker:
     def __init__(self, color, x, y, width, height):
         Rectangle.__init__(self, color, x, y, width, height)
 
@@ -1662,7 +1660,7 @@ class MissMarker(Rectangle):
         win.blit(pygame.transform.smoothscale(pygame.image.load(os.path.join('Sprites','hitTile.png')), (int(tile), int(tile))), (self.pos.x, self.pos.y))
 
 # class for miss markers
-class HighLight(Rectangle):
+class HighLight:
     def __init__(self, color, x, y, width, height):
         Rectangle.__init__(self, color, x, y, width, height)
 
@@ -2215,6 +2213,7 @@ def createSonar(playerTurn):
     global sonarAngle1
     global sonarAngle2
     global sonarController
+    global sonarMaxController
     global averageLength
     global averageAngleDic
 
@@ -2288,7 +2287,11 @@ def createSonar(playerTurn):
     createSonarPowerMeter(sonarRange1, sonarRange2)
 
     #coupling good times
+    print(sonarController)
 
+    if sonarMaxController == 1:
+        sonarController = 0
+    
     #checking sonar charge for audio playback
     #disabling playback if not enough charge
     #valve anti-cheat
@@ -2302,32 +2305,31 @@ def createSonar(playerTurn):
     #player 1 and player 2
     blockSonar()
     if sonarController == 1:
+
         sonar_hitShips = {}
-        #beamHitNumList = {}
-        #print(shipDic1)
+        
         if playerTurn == 1:
             for key, val in shipDic2.items():
                 ship = val
                 if ship.sonarHitNum > 0:
                     sonar_hitShips[key] = val
-
-                    #beamHitNumList.append(ship.sonarHitNum)
-                    #1st item in beamHitNum list will be the first item in sonar_hitShi[s]
     
-            #print('beamHitNumList: {}'.format(beamHitNumList))
-            #print('(shipDic2)sonar_hitShips: {}'.format(sonar_hitShips))
         elif playerTurn == 2:
             for key, val in shipDic1.items():
                 ship = val
                 if ship.sonarHitNum > 0:
                     sonar_hitShips[key] = val
-                    #beamHitNumList.append(ship.sonarHitNum)
-            #print('(shipDic1)sonar_hitShips: {}'.format(sonar_hitShips))
-        # calls ship sounds,
+    
+        # calls ship sounds
         shipTheme_playback(sonar_hitShips)
-        
-        #TO BREAK THE LOOP
+        #BREAK THE LOOP
         sonarController = 0
+        
+    # if max charge returns a hit ship & distress pinpoint, play
+    elif sonarMaxController == 1:
+        ch_buttonSounds.play(distressBeaconLight)
+        #BREAK THE LOOP
+        sonarMaxController = 0
 
 # deletes sonar beams that are blocked by a ship
 def blockSonar():
@@ -2369,6 +2371,8 @@ def pulseSonar():
     global tempHitDic
     global sonarHitPosx
     global sonarHitPosy
+    global sonarMaxController
+    
 
     tempHitDic = {}
     # check it under ship
@@ -2396,14 +2400,15 @@ def pulseSonar():
                 if whatThePointDoin(key):
                     pinPointPulse2 = key
                     whereSonarHit(1, key)
-            tempList = []
-            for key in tempHitDic.keys():
-                tempList.append(tempHitDic[key][0])
-            tempMin = min(tempList)
-            for key in tempHitDic.keys():
-                if tempMin in tempHitDic[key]:
-                    sonarHitPosx = tempHitDic[key][0]
-                    sonarHitPosy = tempHitDic[key][1]
+                    print(sonarController)
+##            tempList = []
+##            for key in tempHitDic.keys():
+##                tempList.append(tempHitDic[key][0])
+##            tempMin = min(tempList)
+##            for key in tempHitDic.keys():
+##                if tempMin in tempHitDic[key]:
+##                    sonarHitPosx = tempHitDic[key][0]
+##                    sonarHitPosy = tempHitDic[key][1]
 
     if playerTurn == 2:
         Sprite.missilePhaseMessage2 = True
@@ -2426,14 +2431,14 @@ def pulseSonar():
                 if whatThePointDoin(key):
                     pinPointPulse1 = key
                     whereSonarHit(2, key)
-            tempList = []
-            for key in tempHitDic.keys():
-                tempList.append(tempHitDic[key][0])
-            tempMin = min(tempList)
-            for key in tempHitDic.keys():
-                if tempMin in tempHitDic[key]:
-                    sonarHitPosx = tempHitDic[key][0]
-                    sonarHitPosy = tempHitDic[key][1]
+##            tempList = []
+##            for key in tempHitDic.keys():
+##                tempList.append(tempHitDic[key][0])
+##            tempMin = min(tempList)
+##            for key in tempHitDic.keys():
+##                if tempMin in tempHitDic[key]:
+##                    sonarHitPosx = tempHitDic[key][0]
+##                    sonarHitPosy = tempHitDic[key][1]
 
     # update sonar charge meter
     createSonarChargeMeter()
@@ -2480,13 +2485,21 @@ def whatThePointDoin(ship):
 # what tile the beam hit ship
 def whereSonarHit(playerNum, ship):
     global pinPointDistress
+    global sonarMaxController
+    
     if playerNum == 1:
         if shipDic2[ship].width > shipDic2[ship].height:
+            print('width > height')
+            sonarMaxController = 1
+            ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic2[ship].length):
                 if (shipDic2[ship].pos.x + tile*(i + 1)) > sonarHitPosx and sonarHitPosx < (shipDic2[ship].pos.x + tile*(i + 2)):
                     pinPointDistress = distressCall((255,255,0), shipDic2[ship].pos.x + tile*i - playScreenWidth, shipDic2[ship].pos.y - playScreenHeight, tile, tile)
                     return
         if shipDic2[ship].width < shipDic2[ship].height:
+            sonarMaxController = 1
+            print('width < height')
+            ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic2[ship].length):
                 if (shipDic2[ship].pos.y + tile*(i + 1)) > sonarHitPosy and sonarHitPosy < (shipDic2[ship].pos.y + tile*(i + 2)):
                     pinPointDistress = distressCall((255,255,0), shipDic2[ship].pos.x - playScreenWidth, shipDic2[ship].pos.y + tile*i - playScreenHeight, tile, tile)
@@ -2494,11 +2507,17 @@ def whereSonarHit(playerNum, ship):
 
     if playerNum == 2:
         if shipDic1[ship].width > shipDic1[ship].height:
+            print('width > height')
+            sonarMaxController = 1
+            ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic1[ship].length):
                 if (shipDic1[ship].pos.x + tile*(i + 1)) > sonarHitPosx and sonarHitPosx < (shipDic1[ship].pos.x + tile*(i + 2)):
                     pinPointDistress = distressCall((255,255,0), shipDic1[ship].pos.x + tile*i + playScreenWidth, shipDic1[ship].pos.y - playScreenHeight, tile, tile)
                     return
         if shipDic1[ship].width < shipDic1[ship].height:
+            print('width < height')
+            sonarMaxController = 1
+            ch_buttonSounds.play(distressBeaconLight)
             for i in range(shipDic1[ship].length):
                 if (shipDic1[ship].pos.y + tile*(i + 1)) > sonarHitPosy and sonarHitPosy < (shipDic1[ship].pos.y + tile*(i + 2)):
                     pinPointDistress = distressCall((255,255,0), shipDic1[ship].pos.x + playScreenWidth, shipDic1[ship].pos.y + tile*i - playScreenHeight, tile, tile)
@@ -3286,7 +3305,6 @@ def shipTheme_playback(sonar_hitShips):
 
         except:
             pass
-
         
     if playerTurn == 2:
 
@@ -3382,6 +3400,7 @@ def shipTheme_playback(sonar_hitShips):
                     #print("ship 4 hit, ship beam avg dist: {}, ship beam hit num: {} volume_distanceRatio {}".format(shipDic1['ship4'].averageDistance,shipDic1['ship4'].sonarHitNum, volume_distanceRatio))
         except:
             pass
+        
     return
 
 # plays background water sounds
@@ -3399,17 +3418,21 @@ def waterSound(run, waterClock, waterSound, waterChannel, waterChannelBuffer):
        waterChannel.play(waterSound, maxtime=90000)
        #setting volume (in stereo) to 1/2 of full volume 
        waterChannel.set_volume(0.5,0.5)
+       print('main begin')
 
     #fade conditional - tracks duration of play length and fades accordingly
     #if water clock number is a number near any number where % 650 = 0:
     #fadeout the primary playback channel, and fade in the secondary playback channel
-    if waterChannel.get_busy() == True and waterClock % 3000 == 0:
+    if waterChannel.get_busy() == True and waterClock % 1500 == 0:
+        print('buffer begin')
+        print('main fadeout')
         waterChannel.fadeout(9000)
         waterChannelBuffer.play(waterSound, maxtime=80000, fade_ms=9000)
 
     #fades out the buffer channel once enough time has passed for the primary playback channel to fade back in
-    if waterChannelBuffer.get_busy() == True and waterChannel.get_busy() == True and waterClock % 3500 == 0:#615+35=685 (5 seconds after a fade occurs)
+    if waterChannelBuffer.get_busy() == True and waterChannel.get_busy() == True and waterClock % 3500 == 0:
         waterChannelBuffer.fadeout(5000)
+        print('buffer fadeout')
 
     #below measurements differ according to runtime, but fade works nonetheless (lol (optimize for pi))
     #650 is the cutoff point for a fade
@@ -3484,6 +3507,7 @@ sonarMeter2 = 0
 sonarChargeMeter1 = 0
 sonarChargeMeter2 = 0
 sonarController = 0
+sonarMaxController = 0
 subSink1 = False
 subSink2 = False
 subSinkPunish1 = 0
